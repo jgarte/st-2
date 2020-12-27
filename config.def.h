@@ -93,32 +93,42 @@ char *termname = "st-256color";
  */
 unsigned int tabspaces = 8;
 
-/* Terminal colors (16 used in escape sequence) */
-static const char *palettes[][16] = {
-    {"black", "red3", "green3", "yellow3", "blue2", "magenta3", "cyan3",
-     "gray90", "gray50", "red", "green", "yellow", "#5c5cff", "magenta",
-     "cyan", "white"},
-    {"#223", "#900", "#080", "#fe7", "#35e", "#fc5", "#18e", "#aaa", "#666",
-     "#f25", "#0b0", "#ff6", "#46f", "#d6a", "#6bf", "#ddd"},
-    {"#eaeaea", "#b7141f", "#457b24", "#fc7b08", "#134eb2", "#560088",
-     "#0e717c", "#777777", "#424242", "#e83b3f", "#7aba3a",
-     "#fd8e09", "#54a4f3", "#aa4dbc", "#26bbd1", "#aaaaaa"},
-    {"#20242d", "#b04b57", "#87b379", "#e5c179", "#7d8fa4", "#a47996",
-     "#85a7a5", "#b3b8c3", "#000000", "#b04b57", "#87b379", "#e5c179",
-     "#7d8fa4", "#a47996", "#85a7a5", "#ffffff"},
- };
+/* Terminal colors (16 first used in escape sequence) */
+static const char *colorname[] = {
 
-static const char **colorname;
+  /* 8 normal colors */
+  [0] = "#000000", /* black   */
+  [1] = "#ff5555", /* red     */
+  [2] = "#50fa7b", /* green   */
+  [3] = "#f1fa8c", /* yellow  */
+  [4] = "#bd93f9", /* blue    */
+  [5] = "#ff79c6", /* magenta */
+  [6] = "#8be9fd", /* cyan    */
+  [7] = "#bbbbbb", /* white   */
 
+  /* 8 bright colors */
+  [8]  = "#44475a", /* black   */
+  [9]  = "#ff5555", /* red     */
+  [10] = "#50fa7b", /* green   */
+  [11] = "#f1fa8c", /* yellow  */
+  [12] = "#bd93f9", /* blue    */
+  [13] = "#ff79c6", /* magenta */
+  [14] = "#8be9fd", /* cyan    */
+  [15] = "#ffffff", /* white   */
+
+  /* special colors */
+  [256] = "#282a36", /* background */
+  [257] = "#f8f8f2", /* foreground */
+};
 
 /*
  * Default colors (colorname index)
  * foreground, background, cursor
  */
-unsigned int defaultfg = 5;
-unsigned int defaultbg = 0;
-static unsigned int defaultcs = 5;
-static unsigned int defaultrcs = 5;
+unsigned int defaultfg = 257;
+unsigned int defaultbg = 256;
+static unsigned int defaultcs = 257;
+static unsigned int defaultrcs = 257;
 
 /*
  * Colors used, when the specific fg == defaultfg. So in reverse mode this
@@ -195,10 +205,6 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
 	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
 	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
-	{ TERMMOD,              XK_F1,          setpalette,     {.i =  0} },
-	{ TERMMOD,              XK_F2,          setpalette,     {.i =  1} },
-	{ TERMMOD,              XK_F3,          setpalette,     {.i =  2} },
-	{ TERMMOD,              XK_F4,          setpalette,     {.i =  3} },
 };
 
 /*
@@ -470,4 +476,3 @@ static char ascii_printable[] =
 	" !\"#$%&'()*+,-./0123456789:;<=>?"
 	"@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"
 	"`abcdefghijklmnopqrstuvwxyz{|}~";
-
